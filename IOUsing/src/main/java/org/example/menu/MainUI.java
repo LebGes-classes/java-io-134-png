@@ -31,6 +31,14 @@ public class MainUI{
         }
 
     }
+    public void clearConsole(){
+
+        try {
+            new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor();
+        } catch (Exception E) {
+            System.out.println(E);
+        }
+    }
     public String[] removeDummy(String[] arr){
 
         for(int i = 0; i < arr.length; i++){
@@ -167,7 +175,6 @@ public class MainUI{
     }
 
     private void showGroupMenu(Pair<String, String> pair)throws IOException{
-        System.out.println("first " + pair.getFirstEl() + " second " + pair.getSecondEl());
 
         if(pair.getSecondEl().equals("showGroups")){
             List<Integer> list = controller.getGroupNums().stream().sorted().toList();
@@ -475,6 +482,7 @@ public class MainUI{
         boolean working = true;
 
         while(working){
+            //clearConsole();
             try {
                 switch (operation.getFirstEl()) {
                     case "standartMenu":

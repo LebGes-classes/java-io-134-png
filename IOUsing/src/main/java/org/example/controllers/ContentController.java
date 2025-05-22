@@ -74,7 +74,6 @@ public class ContentController {
 
             Subject su = new Subject(list.get(0), id);
             subjects.put(id, su);
-            System.out.println(id + " " + su.getTitle());
         }
     }
     private void parseStudents(String json)throws IOException {

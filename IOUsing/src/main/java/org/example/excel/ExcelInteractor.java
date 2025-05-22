@@ -75,7 +75,7 @@ public class ExcelInteractor {
             }
 
             String json = mapper.writeValueAsString(strSheet);
-            jsonsPairs.add(new Pair(sheet.getSheetName(), json));
+            jsonsPairs.add(new Pair<String, String>(sheet.getSheetName(), json));
 
         }
 
