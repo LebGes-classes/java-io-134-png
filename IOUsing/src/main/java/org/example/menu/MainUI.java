@@ -35,8 +35,8 @@ public class MainUI{
 
         try {
             new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor();
-        } catch (Exception E) {
-            System.out.println(E);
+        } catch (Exception exc) {
+            exc.printStackTrace();
         }
     }
     public String[] removeDummy(String[] arr){
@@ -482,7 +482,7 @@ public class MainUI{
         boolean working = true;
 
         while(working){
-            //clearConsole();
+            clearConsole();
             try {
                 switch (operation.getFirstEl()) {
                     case "standartMenu":

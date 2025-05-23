@@ -140,7 +140,7 @@ public class ExcelInteractor {
         jsonsPairs = null;
         return str;
     }
-    //если информация о группах то название таблички будет заканчиваться на номер группы.
+    //если информация о группах то название таблички и номер группы.
     //метод вызывается в конце работы журнала
     public void pushChanges(String json)throws IOException, InvalidFormatException {
         HashMap<Integer, Workbook> workbooks = new HashMap<>();
