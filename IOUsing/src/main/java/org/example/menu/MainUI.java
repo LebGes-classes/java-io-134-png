@@ -125,6 +125,17 @@ public class MainUI{
 
         controller.makeNewGroup(group, reader);
     }
+    private void removeGroup(Pair<String, String> pair, int group)throws IOException{
+        pair.setSecondEl("showGroups");
+        if(!controller.removeGroup(group))
+            System.out.println("Группу нельзя удалить, в ней еще есть студенты");
+        else
+            System.out.println("Группа успешно удалена");
+
+        System.out.println("Введи любой символ чтобы вернуться обратно");
+        reader.readLine();
+
+    }
 
     private void showStandartMenu(Pair<String, String> pair) throws IOException{
 
@@ -223,6 +234,7 @@ public class MainUI{
             System.out.println("2. Показать расписание группы");
             System.out.println("3. Преподы у группы");
             System.out.println("4. Добавить нового студента в группу");
+            System.out.println("5. Удалить группу");
             System.out.println("==========");
             System.out.println("Выберите действие");
 
@@ -250,6 +262,9 @@ public class MainUI{
                     break;
                 case "4":
                     addStudent(group);
+                    break;
+                case "5":
+                    removeGroup(pair, group);
                     break;
                 default:
                     System.out.println("Такое нельзя вводить!!");
@@ -444,8 +459,6 @@ public class MainUI{
             reader.readLine();
             pair.setSecondEl("showConcreteGroup!" + group);
         }
-
-
 
     }
 

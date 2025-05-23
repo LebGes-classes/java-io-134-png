@@ -187,6 +187,12 @@ public class GroupController {
         pointsChanged = true;
         studsPoints.put(newStudent.getId(), new StudentPoints(newStudent, fillPoints()));
     }
+    public boolean isGroupEmpty(){
+        if(studsPoints.isEmpty())
+            return true;
+
+        return false;
+    }
 
     public String getSchedule(){
         return schedule.getSchedule();

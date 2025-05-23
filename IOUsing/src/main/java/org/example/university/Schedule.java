@@ -45,7 +45,6 @@ public class Schedule {
     }
 
     private void formStrMap(){
-
         int id;
         for(Subject subj: subjects.values()){
 
@@ -90,11 +89,9 @@ public class Schedule {
                 for(int j = 0; j < (maxSizes.get(i) - day.get(i).length()); j++){
                     finalScheduleForm += " ";
                 }
-
                 finalScheduleForm += "|";
 
             }
-
             finalScheduleForm += "\n";
         }
     }

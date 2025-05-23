@@ -4,7 +4,8 @@ package org.example.controllers;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
-import org.example.excel.ExcelInteractor;
+import org.example.excel.ExcelChanger;
+import org.example.excel.ExcelParser;
 import org.example.excel.Pair;
 import org.example.university.*;
 
@@ -15,19 +16,25 @@ import java.util.*;
 public class MainController {
 
     private ObjectMapper mapper = new ObjectMapper();
-    private ExcelInteractor interactor;
+    private ExcelParser parser;
+    private ExcelChanger changer;
     private HashMap<Integer, GroupController> groups; //номер группы - группа
     private ContentController contentContr;
 
+    private ArrayList<Integer> removedGroups;
+
     public MainController(){
-        interactor = new ExcelInteractor();
+        parser = new ExcelParser();
+        changer = new ExcelChanger();
+
         try {
 
-            String json = interactor.getUniversityContents();
+            String json = parser.getUniversityContents();
             List<Pair<String, String>> list = mapper.readValue(json, new TypeReference<List<Pair<String, String>>>(){});
 
             contentContr = new ContentController(list);
             groups = new HashMap<>();
+            removedGroups = new ArrayList<>();
 
         }
         catch(IOException exc){
@@ -38,7 +45,7 @@ public class MainController {
     public void prepareGroupInfo(int group){
         try {
 
-            String json = interactor.getGroupInfo(group);
+            String json = parser.getGroupInfo(group);
             List<Pair<String, String>> pairs = mapper.readValue(json, new TypeReference<List<Pair<String, String>>>() {});
 
             GroupController groupContr = new GroupController(group, contentContr, pairs);
@@ -64,9 +71,8 @@ public class MainController {
         groups.put(num, newGroup);
     }
     public boolean isGroupPrepared(int group){
-        if(groups.get(group) == null){
+        if(groups.get(group) == null)
             return false;
-        }
 
         return true;
     }
@@ -130,6 +136,10 @@ public class MainController {
     }
 
     public void saveChanges()throws IOException, InvalidFormatException {
+        for(Integer groupNum: removedGroups){
+            changer.removeGroup(groupNum);
+        }
+
         List<Pair<String, String>> jsons = new ArrayList<>();
         List<List<String>> sheetData;
         List<String> row;
@@ -223,7 +233,7 @@ public class MainController {
         }
 
         String finalJson = mapper.writeValueAsString(jsons);
-        interactor.pushChanges(finalJson);
+        changer.pushChanges(finalJson);
     }
 
     private String jsonForNewGroup(GroupController group) throws IOException{
@@ -291,5 +301,18 @@ public class MainController {
         }
 
         return mapper.writeValueAsString(sheetsData);
+    }
+
+    //группа удаляется только если у нее стоит флаг, а флаг может быть поставлен только если группа пустая
+    //возвращает true если группа удалена, false если в ней есть студенты
+    public boolean removeGroup(int group){
+        GroupController deletedGroup = groups.get(group);
+
+        if(!deletedGroup.isGroupEmpty())
+            return false;
+
+        groups.remove(group);
+        removedGroups.add(deletedGroup.getGroup());
+        return true;
     }
 }
